@@ -15,15 +15,24 @@ func _ready():
 func _process(delta):
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
+	if $TravelTimer.is_stopped() and $explosions.get_child_count() == 0:
+		print('yo')
+		hide()
+	#	queue_free()
 	position += velocity * delta
 
 
 func _on_timer_timeout():
-	$AnimatedSprite2D.animation = "explode"
-	velocity = Vector2(0, 0)
+	velocity = Vector2.ZERO
 	rotation = 0
-	$ExplodeTimer.start()
+	var explosion = explosion_scene.instantiate()
+	explosion.rotation = 0
+	explosion.position = Vector2.ZERO
+	$explosions.add_child(explosion)
+	#$AnimatedSprite2D.animation = "explode"
+	#$ExplodeTimer.start()
 
 
 func _on_explode_timer_timeout():
-	queue_free()
+	#queue_free()
+	pass

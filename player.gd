@@ -32,14 +32,12 @@ func _process(delta):
 func _on_rate_of_fire_timeout():
 	if not Input.is_action_pressed("click"):
 		return
+	
 	var firebolt = firebolt_scene.instantiate()
 	firebolt.position = position.move_toward(get_global_mouse_position(), projectile_offset)
 	#var direction = randf_range(-PI, PI)
 	var direction = position.angle_to_point(get_global_mouse_position())
 	firebolt.velocity = (get_global_mouse_position() - position).normalized()
-	print(position)
-	print(get_global_mouse_position())
-	print(position.angle_to(get_global_mouse_position()))
 	firebolt.rotation = direction
 	
 	$projectiles.add_child(firebolt)
