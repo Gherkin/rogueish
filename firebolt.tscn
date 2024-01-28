@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://c8gcahfojnjup"]
+
+[ext_resource type="Texture2D" uid="uid://b7ehibrrh5wyw" path="res://art/firebolt traveling.png" id="1_l0g4o"]
+[ext_resource type="Script" path="res://firebolt.gd" id="1_x62fc"]
+[ext_resource type="Texture2D" uid="uid://dclavvckx2cwt" path="res://art/fire.png" id="3_mljht"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rhdre"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_mljht")
+}],
+"loop": true,
+"name": &"explode",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_l0g4o")
+}],
+"loop": true,
+"name": &"travel",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k5m3x"]
+size = Vector2(8, 5)
+
+[node name="Firebolt" type="Area2D"]
+script = ExtResource("1_x62fc")
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_rhdre")
+animation = &"travel"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1, 1.5)
+shape = SubResource("RectangleShape2D_k5m3x")
+
+[node name="TravelTimer" type="Timer" parent="."]
+
+[node name="ExplodeTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="TravelTimer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="ExplodeTimer" to="." method="_on_explode_timer_timeout"]

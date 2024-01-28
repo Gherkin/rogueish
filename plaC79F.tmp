@@ -1,0 +1,46 @@
+[gd_scene load_steps=7 format=3 uid="uid://28qr61k2i5v5"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_16u16"]
+[ext_resource type="Texture2D" uid="uid://ee0gsaya143u" path="res://art/Sprite-0001.png" id="1_c1hix"]
+[ext_resource type="PackedScene" uid="uid://c8gcahfojnjup" path="res://firebolt.tscn" id="2_8wv7q"]
+[ext_resource type="Texture2D" uid="uid://b65jm2hjlaske" path="res://art/Sprite-0002.png" id="2_f0d0j"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g7whu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_c1hix")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_f0d0j")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8ha35"]
+size = Vector2(13, 24)
+
+[node name="Player" type="Area2D"]
+script = ExtResource("1_16u16")
+firebolt_scene = ExtResource("2_8wv7q")
+projectile_offset = 30
+metadata/_edit_group_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_g7whu")
+animation = &"idle"
+frame_progress = 0.828243
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 4)
+shape = SubResource("RectangleShape2D_8ha35")
+
+[node name="projectiles" type="Node2D" parent="."]
+top_level = true
+
+[node name="RateOfFire" type="Timer" parent="."]
+wait_time = 0.23
+
+[connection signal="timeout" from="RateOfFire" to="." method="_on_rate_of_fire_timeout"]
