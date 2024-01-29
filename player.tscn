@@ -43,4 +43,5 @@ top_level = true
 [node name="RateOfFire" type="Timer" parent="."]
 wait_time = 0.23
 
+[connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="timeout" from="RateOfFire" to="." method="_on_rate_of_fire_timeout"]

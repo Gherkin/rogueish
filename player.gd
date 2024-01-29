@@ -22,6 +22,11 @@ func _process(delta):
 		velocity.y += 1
 	if Input.is_action_pressed("up"):
 		velocity.y -= 1
+	if Input.is_action_pressed("click") and $RateOfFire.is_stopped():
+		_on_rate_of_fire_timeout()
+		$RateOfFire.start()
+	elif not Input.is_action_pressed("click") and not $RateOfFire.is_stopped():
+		$RateOfFire.stop()
 	
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
@@ -41,3 +46,5 @@ func _on_rate_of_fire_timeout():
 	firebolt.rotation = direction
 	
 	$projectiles.add_child(firebolt)
+
+
