@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://28qr61k2i5v5"]
+[gd_scene load_steps=8 format=3 uid="uid://28qr61k2i5v5"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_16u16"]
 [ext_resource type="Texture2D" uid="uid://ee0gsaya143u" path="res://art/Sprite-0001.png" id="1_c1hix"]
@@ -22,6 +22,14 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ha35"]
 size = Vector2(13, 24)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nkwry"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [node name="Player" type="Area2D"]
 script = ExtResource("1_16u16")
 firebolt_scene = ExtResource("2_8wv7q")
@@ -42,6 +50,13 @@ top_level = true
 
 [node name="RateOfFire" type="Timer" parent="."]
 wait_time = 0.23
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_nkwry")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://firebolt.tscn")
+spawn_path = NodePath("../projectiles")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="timeout" from="RateOfFire" to="." method="_on_rate_of_fire_timeout"]

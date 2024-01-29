@@ -3,6 +3,7 @@ extends Area2D
 @export var speed = 400
 @export var firebolt_scene: PackedScene
 @export var projectile_offset = 50
+var velocity = Vector2.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -13,7 +14,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var velocity = Vector2.ZERO
+	velocity = Vector2.ZERO
 	if Input.is_action_pressed("right"):
 		velocity.x += 1
 	if Input.is_action_pressed("left"):
@@ -45,6 +46,6 @@ func _on_rate_of_fire_timeout():
 	firebolt.velocity = (get_global_mouse_position() - position).normalized()
 	firebolt.rotation = direction
 	
-	$projectiles.add_child(firebolt)
+	$projectiles.add_child(firebolt, true)
 
 

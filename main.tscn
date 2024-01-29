@@ -10,8 +10,16 @@ script = ExtResource("1_um6ja")
 player_scene = ExtResource("2_hhcsb")
 map_scene = ExtResource("1_nsye8")
 
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn", "res://map.tscn")
+spawn_path = NodePath("../Level")
+
 [node name="MainMenu" parent="." instance=ExtResource("3_gldpg")]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
+[node name="Level" type="Node" parent="."]
+
+[connection signal="connect" from="MainMenu" to="." method="_on_main_menu_connect"]
+[connection signal="host" from="MainMenu" to="." method="_on_main_menu_host"]
 [connection signal="start_game" from="MainMenu" to="." method="_on_main_menu_start_game"]
