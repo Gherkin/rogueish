@@ -1,16 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://bb8ftfp4vw64f"]
+[gd_scene load_steps=5 format=3 uid="uid://bb8ftfp4vw64f"]
 
 [ext_resource type="PackedScene" uid="uid://dsksktdlmi6je" path="res://map.tscn" id="1_nsye8"]
+[ext_resource type="Script" path="res://main.gd" id="1_um6ja"]
 [ext_resource type="PackedScene" uid="uid://28qr61k2i5v5" path="res://player.tscn" id="2_hhcsb"]
+[ext_resource type="PackedScene" uid="uid://dllb2x3c2t4js" path="res://main_menu.tscn" id="3_gldpg"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_um6ja")
+player_scene = ExtResource("2_hhcsb")
+map_scene = ExtResource("1_nsye8")
 
-[node name="Map" parent="." instance=ExtResource("1_nsye8")]
-scale = Vector2(1, 1)
+[node name="MainMenu" parent="." instance=ExtResource("3_gldpg")]
 
-[node name="Player" parent="." instance=ExtResource("2_hhcsb")]
-scale = Vector2(2, 2)
+[node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
-scale = Vector2(0.5, 0.5)
-zoom = Vector2(2, 2)
+[connection signal="start_game" from="MainMenu" to="." method="_on_main_menu_start_game"]
