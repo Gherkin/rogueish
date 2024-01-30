@@ -4,12 +4,14 @@ extends MultiplayerSynchronizer
 @export var right := false
 @export var left := false
 @export var down := false
+@export var click := false
 
 enum Inputs {
 	UP,
 	DOWN,
 	LEFT,
-	RIGHT
+	RIGHT,
+	CLICK
 }
 
 # Called when the node enters the scene tree for the first time.
@@ -29,6 +31,8 @@ func button_pressed(input):
 			left = true
 		Inputs.RIGHT:
 			right = true
+		Inputs.CLICK:
+			click = true
 
 @rpc("call_local")
 func button_released(input):
@@ -41,6 +45,8 @@ func button_released(input):
 			left = false
 		Inputs.RIGHT:
 			right = false
+		Inputs.CLICK:
+			click = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -60,3 +66,8 @@ func _process(delta):
 		button_pressed.rpc(Inputs.RIGHT)
 	elif right and !Input.is_action_pressed("right"):
 		button_released.rpc(Inputs.RIGHT)
+	
+	if !click and Input.is_action_pressed("click"):
+		button_pressed(Inputs.CLICK)
+	if click and !Input.is_action_pressed("click"):
+		button_released(Inputs.CLICK)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://28qr61k2i5v5"]
+[gd_scene load_steps=10 format=3 uid="uid://28qr61k2i5v5"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_16u16"]
 [ext_resource type="Texture2D" uid="uid://ee0gsaya143u" path="res://art/Sprite-0001.png" id="1_c1hix"]
@@ -34,6 +34,11 @@ properties/2/path = NodePath(".:player")
 properties/2/spawn = true
 properties/2/replication_mode = 1
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ctso1"]
+properties/0/path = NodePath("..:projectile_offset")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Player" type="Area2D"]
 script = ExtResource("1_16u16")
 firebolt_scene = ExtResource("2_8wv7q")
@@ -64,6 +69,7 @@ spawn_path = NodePath("../projectiles")
 
 [node name="PlayerInputSynchronizer" type="MultiplayerSynchronizer" parent="."]
 root_path = NodePath("../ServerSynchronizer")
+replication_config = SubResource("SceneReplicationConfig_ctso1")
 script = ExtResource("5_lqq4s")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]

@@ -36,10 +36,10 @@ func _process(delta):
 	if input.up:
 		velocity.y -= 1
 
-	if Input.is_action_pressed("click") and $RateOfFire.is_stopped():
+	if input.click and $RateOfFire.is_stopped():
 		_on_rate_of_fire_timeout()
 		$RateOfFire.start()
-	elif not Input.is_action_pressed("click") and not $RateOfFire.is_stopped():
+	elif not input.click and not $RateOfFire.is_stopped():
 		$RateOfFire.stop()
 	
 	if velocity.length() > 0:
