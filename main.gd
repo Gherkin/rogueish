@@ -5,6 +5,7 @@ extends Node
 
 @onready var current_menu = $MainMenu
 
+
 const PORT = 4433
 
 func start_game():
@@ -13,13 +14,18 @@ func start_game():
 
 	
 func create_game():
-	print('starting game')
+	print('creating game')
+	for id in multiplayer.get_peers():
+		var player = player_scene.instantiate()
+		player.player = id
+		$Level.add_child(player, true)
 	var player = player_scene.instantiate()
+	player.player = 1
+	$Level.add_child(player, true)
 	var map = map_scene.instantiate()
 	
-	$Camera2D.reparent(player)
+	#$Camera2D.reparent(player)
 	$Level.add_child(map)
-	$Level.add_child(player)
 	start_game()
 	#get_tree().paused = false
 

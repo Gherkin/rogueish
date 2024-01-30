@@ -14,10 +14,12 @@ enum Inputs {
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print(str(get_multiplayer_authority()) + ' ' +  str(multiplayer.get_unique_id()))
 	set_process(get_multiplayer_authority() == multiplayer.get_unique_id())
 
 @rpc("call_local")
 func button_pressed(input):
+	print(get_multiplayer_authority())
 	match input:
 		Inputs.UP:
 			up = true

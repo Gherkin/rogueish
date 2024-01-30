@@ -8,7 +8,7 @@ extends Area2D
 	set(id):
 		player = id
 		# Give authority over the player input to the appropriate peer.
-		$PlayerInput.set_multiplayer_authority(id)
+		$PlayerInputSynchronizer.set_multiplayer_authority(id)
 
 @onready var input = $PlayerInputSynchronizer
 
