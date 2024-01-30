@@ -3,12 +3,17 @@ extends Node
 @export var player_scene: PackedScene
 @export var map_scene: PackedScene
 
+@onready var current_menu = $MainMenu
+
 const PORT = 4433
 
 func start_game():
-	$MainMenu.hide()
+	print('starting game')
+	current_menu.hide()
+
 	
 func create_game():
+	print('starting game')
 	var player = player_scene.instantiate()
 	var map = map_scene.instantiate()
 	
@@ -17,11 +22,16 @@ func create_game():
 	$Level.add_child(player)
 	start_game()
 	#get_tree().paused = false
-	
+
+func open_lobby():
+	$MainMenu.hide()
+	$LobbyMenu.show()
+	current_menu = $LobbyMenu
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	multiplayer.server_relay = false
+	$LobbyMenu.hide()
 	#get_tree().paused = true
 
 
@@ -49,15 +59,22 @@ func _on_main_menu_connect():
 	multiplayer.multiplayer_peer = peer
 	start_game()
 
-
+func _on_peer_connected(id):
+	print('connected!')
+	$LobbyMenu/Label.text = str(id)
 
 func _on_main_menu_host():
 	print('hosting')
 	# Start as server.
 	var peer = ENetMultiplayerPeer.new()
 	peer.create_server(PORT)
+	peer.connect("peer_connected", _on_peer_connected)
 	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		OS.alert("Failed to start multiplayer server.")
 		return
 	multiplayer.multiplayer_peer = peer
+	open_lobby()
+
+
+func _on_lobby_menu_lobby_start():
 	create_game()

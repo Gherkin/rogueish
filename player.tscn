@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://28qr61k2i5v5"]
+[gd_scene load_steps=9 format=3 uid="uid://28qr61k2i5v5"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_16u16"]
 [ext_resource type="Texture2D" uid="uid://ee0gsaya143u" path="res://art/Sprite-0001.png" id="1_c1hix"]
 [ext_resource type="PackedScene" uid="uid://c8gcahfojnjup" path="res://firebolt.tscn" id="2_8wv7q"]
 [ext_resource type="Texture2D" uid="uid://b65jm2hjlaske" path="res://art/Sprite-0002.png" id="2_f0d0j"]
+[ext_resource type="Script" path="res://player_input_synchronizer.gd" id="5_lqq4s"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g7whu"]
 animations = [{
@@ -51,12 +52,16 @@ top_level = true
 [node name="RateOfFire" type="Timer" parent="."]
 wait_time = 0.23
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_nkwry")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://firebolt.tscn")
 spawn_path = NodePath("../projectiles")
+
+[node name="PlayerInputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("../ServerSynchronizer")
+script = ExtResource("5_lqq4s")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="timeout" from="RateOfFire" to="." method="_on_rate_of_fire_timeout"]

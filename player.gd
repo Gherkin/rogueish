@@ -3,7 +3,18 @@ extends Area2D
 @export var speed = 400
 @export var firebolt_scene: PackedScene
 @export var projectile_offset = 50
+
+@export var player := 1 :
+	set(id):
+		player = id
+		# Give authority over the player input to the appropriate peer.
+		$PlayerInput.set_multiplayer_authority(id)
+
+@onready var input = $PlayerInputSynchronizer
+
 var velocity = Vector2.ZERO
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,15 +25,17 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	
 	velocity = Vector2.ZERO
-	if Input.is_action_pressed("right"):
+	if input.right:
 		velocity.x += 1
-	if Input.is_action_pressed("left"):
+	if input.left:
 		velocity.x -= 1
-	if Input.is_action_pressed("down"):
+	if input.down:
 		velocity.y += 1
-	if Input.is_action_pressed("up"):
+	if input.up:
 		velocity.y -= 1
+
 	if Input.is_action_pressed("click") and $RateOfFire.is_stopped():
 		_on_rate_of_fire_timeout()
 		$RateOfFire.start()
