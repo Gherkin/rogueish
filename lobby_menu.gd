@@ -1,27 +1,20 @@
 extends CanvasLayer
 
-signal start_game
-signal host
-signal connect
-
+signal lobby_start
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	pass
-
+	if not multiplayer.is_server():
+		$Button.hide()
+		$Label.text = 'WAITING FOR HOST TO START!'
 
 func _on_button_pressed():
-	start_game.emit()
+	lobby_start.emit()
 
-
-func _on_connect_pressed():
-	connect.emit()
-
-
-func _on_host_pressed():
-	host.emit()
+func _on_peer_connected(id):
+	print('connected!')
+	$Label.text = str(id)

@@ -13,6 +13,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	process_mode = Node.PROCESS_MODE_PAUSABLE
 	if velocity.length() > 0:
 		velocity = velocity.normalized() * speed
 	if $TravelTimer.is_stopped() and $explosions.get_child_count() == 0:

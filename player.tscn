@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://28qr61k2i5v5"]
+[gd_scene load_steps=10 format=3 uid="uid://28qr61k2i5v5"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_16u16"]
 [ext_resource type="Texture2D" uid="uid://ee0gsaya143u" path="res://art/Sprite-0001.png" id="1_c1hix"]
 [ext_resource type="PackedScene" uid="uid://c8gcahfojnjup" path="res://firebolt.tscn" id="2_8wv7q"]
 [ext_resource type="Texture2D" uid="uid://b65jm2hjlaske" path="res://art/Sprite-0002.png" id="2_f0d0j"]
+[ext_resource type="Script" path="res://player_input_synchronizer.gd" id="5_lqq4s"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_g7whu"]
 animations = [{
@@ -21,6 +22,22 @@ animations = [{
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8ha35"]
 size = Vector2(13, 24)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_nkwry"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:player")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_ctso1"]
+properties/0/path = NodePath("..:projectile_offset")
+properties/0/spawn = true
+properties/0/replication_mode = 1
 
 [node name="Player" type="Area2D"]
 script = ExtResource("1_16u16")
@@ -42,6 +59,14 @@ top_level = true
 
 [node name="RateOfFire" type="Timer" parent="."]
 wait_time = 0.23
+
+[node name="ServerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_nkwry")
+
+[node name="PlayerInputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+root_path = NodePath("../ServerSynchronizer")
+replication_config = SubResource("SceneReplicationConfig_ctso1")
+script = ExtResource("5_lqq4s")
 
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="timeout" from="RateOfFire" to="." method="_on_rate_of_fire_timeout"]

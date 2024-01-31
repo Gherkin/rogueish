@@ -37,7 +37,7 @@ position = Vector2(1, 1.5)
 shape = SubResource("RectangleShape2D_k5m3x")
 
 [node name="TravelTimer" type="Timer" parent="."]
-wait_time = 0.898
+wait_time = 0.8
 one_shot = true
 
 [node name="ExplodeTimer" type="Timer" parent="."]

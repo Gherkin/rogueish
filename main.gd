@@ -1,26 +1,71 @@
 extends Node
 
-@export var player_scene: PackedScene
-@export var map_scene: PackedScene
+@onready var current_menu = $MainMenu
 
 
-func create_game():
-	var player = player_scene.instantiate()
-	var map = map_scene.instantiate()
-	
-	$Camera2D.reparent(player)
-	add_child(map)
-	add_child(player)
+const PORT = 4433
+
+@rpc('call_local')
+func start_game():
+	print('starting game')
+	current_menu.hide()
+	get_tree().paused = false
+	$PauseMenu.started = true
+
+func open_lobby():
 	$MainMenu.hide()
+	$LobbyMenu.show()
+	current_menu = $LobbyMenu
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	multiplayer.server_relay = false
+	$LobbyMenu.hide()
+	#get_tree().paused = true
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 
 func _on_main_menu_start_game():
-	create_game()
+	$Level.create()
+	start_game()
+
+
+func _on_main_menu_connect():
+	print('connecting')
+	# Start as client.
+	var txt : String = $MainMenu/ip.text
+	if txt == "":
+		OS.alert("Need a remote to connect to.")
+		return
+	var peer = ENetMultiplayerPeer.new()
+	peer.create_client(txt, PORT)
+	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
+		OS.alert("Failed to start multiplayer client.")
+		return
+	multiplayer.multiplayer_peer = peer
+	open_lobby()
+
+func _on_main_menu_host():
+	print('hosting')
+	# Start as server.
+	var peer = ENetMultiplayerPeer.new()
+	peer.create_server(PORT)
+	peer.connect("peer_connected", $LobbyMenu._on_peer_connected)
+	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
+		OS.alert("Failed to start multiplayer server.")
+		return
+	multiplayer.multiplayer_peer = peer
+	open_lobby()
+
+
+func _on_lobby_menu_lobby_start():
+	$Level.create()
+	start_game.rpc()
+
+
+func _on_level_pausing():
+	pass # Replace with function body.

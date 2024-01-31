@@ -4,28 +4,41 @@ extends Area2D
 @export var firebolt_scene: PackedScene
 @export var projectile_offset = 50
 
+@export var player := 1 :
+	set(id):
+		player = id
+		# Give authority over the player input to the appropriate peer.
+		$PlayerInputSynchronizer.set_multiplayer_authority(id)
+
+@onready var input = $PlayerInputSynchronizer
+
+var velocity = Vector2.ZERO
+
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
 	$AnimatedSprite2D.play()
 	$RateOfFire.start()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	var velocity = Vector2.ZERO
-	if Input.is_action_pressed("right"):
+	
+	velocity = Vector2.ZERO
+	if input.right:
 		velocity.x += 1
-	if Input.is_action_pressed("left"):
+	if input.left:
 		velocity.x -= 1
-	if Input.is_action_pressed("down"):
+	if input.down:
 		velocity.y += 1
-	if Input.is_action_pressed("up"):
+	if input.up:
 		velocity.y -= 1
-	if Input.is_action_pressed("click") and $RateOfFire.is_stopped():
+
+	if input.click and $RateOfFire.is_stopped():
 		_on_rate_of_fire_timeout()
 		$RateOfFire.start()
-	elif not Input.is_action_pressed("click") and not $RateOfFire.is_stopped():
+	elif not input.click and not $RateOfFire.is_stopped():
 		$RateOfFire.stop()
 	
 	if velocity.length() > 0:
@@ -33,18 +46,22 @@ func _process(delta):
 	
 	position += velocity * delta
 
-
-func _on_rate_of_fire_timeout():
-	if not Input.is_action_pressed("click"):
-		return
-	
+@rpc('call_local', 'any_peer')
+func create_firebolt(player_pos, mouse_pos):
 	var firebolt = firebolt_scene.instantiate()
-	firebolt.position = position.move_toward(get_global_mouse_position(), projectile_offset)
-	#var direction = randf_range(-PI, PI)
-	var direction = position.angle_to_point(get_global_mouse_position())
-	firebolt.velocity = (get_global_mouse_position() - position).normalized()
+	var direction = player_pos.angle_to_point(mouse_pos)
+	
+	firebolt.position = player_pos.move_toward(mouse_pos, projectile_offset)
 	firebolt.rotation = direction
+	firebolt.velocity = (mouse_pos - player_pos).normalized()
 	
 	$projectiles.add_child(firebolt)
+
+func _on_rate_of_fire_timeout():
+	if not input.click:
+		return
+	
+	create_firebolt.rpc(position, get_global_mouse_position())
+
 
 

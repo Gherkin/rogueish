@@ -1,18 +1,18 @@
-[gd_scene load_steps=8 format=3 uid="uid://bb8ftfp4vw64f"]
+[gd_scene load_steps=6 format=3 uid="uid://bb8ftfp4vw64f"]
 
 [ext_resource type="PackedScene" uid="uid://dsksktdlmi6je" path="res://map.tscn" id="1_nsye8"]
 [ext_resource type="Script" path="res://main.gd" id="1_um6ja"]
 [ext_resource type="PackedScene" uid="uid://28qr61k2i5v5" path="res://player.tscn" id="2_hhcsb"]
 [ext_resource type="PackedScene" uid="uid://dllb2x3c2t4js" path="res://main_menu.tscn" id="3_gldpg"]
-[ext_resource type="Script" path="res://Level.gd" id="5_tqbt3"]
 [ext_resource type="PackedScene" uid="uid://u81k3lprx5un" path="res://lobby_menu.tscn" id="5_y2vj6"]
-[ext_resource type="PackedScene" uid="uid://gl0u1fn4tscx" path="res://pause_menu.tscn" id="7_mbd1l"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_um6ja")
+player_scene = ExtResource("2_hhcsb")
+map_scene = ExtResource("1_nsye8")
 
-[node name="MapSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("res://map.tscn")
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://player.tscn", "res://map.tscn")
 spawn_path = NodePath("../Level")
 
 [node name="MainMenu" parent="." instance=ExtResource("3_gldpg")]
@@ -20,19 +20,8 @@ spawn_path = NodePath("../Level")
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Level" type="Node" parent="."]
-script = ExtResource("5_tqbt3")
-player_scene = ExtResource("2_hhcsb")
-map_scene = ExtResource("1_nsye8")
-
-[node name="Characters" type="Node" parent="Level"]
-
-[node name="CharacterSpawner" type="MultiplayerSpawner" parent="Level"]
-_spawnable_scenes = PackedStringArray("res://player.tscn")
-spawn_path = NodePath("../Characters")
 
 [node name="LobbyMenu" parent="." instance=ExtResource("5_y2vj6")]
-
-[node name="PauseMenu" parent="." instance=ExtResource("7_mbd1l")]
 
 [connection signal="connect" from="MainMenu" to="." method="_on_main_menu_connect"]
 [connection signal="host" from="MainMenu" to="." method="_on_main_menu_host"]
