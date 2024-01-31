@@ -71,3 +71,4 @@ func _process(_delta):
 		button_pressed(Inputs.CLICK)
 	if click and !Input.is_action_pressed("click"):
 		button_released(Inputs.CLICK)
+

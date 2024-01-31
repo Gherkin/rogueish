@@ -6,7 +6,6 @@ signal lobby_start
 func _ready():
 	pass
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	if not multiplayer.is_server():

@@ -10,16 +10,7 @@ func start_game():
 	print('starting game')
 	current_menu.hide()
 	get_tree().paused = false
-
-@rpc("call_local", "any_peer")
-func pause():
-	print('paused')
-	get_tree().paused = true
-
-@rpc("call_local", "any_peer")
-func unpause():
-	print('unpaused')
-	get_tree().paused = false
+	$PauseMenu.started = true
 
 func open_lobby():
 	$MainMenu.hide()
@@ -74,3 +65,7 @@ func _on_main_menu_host():
 func _on_lobby_menu_lobby_start():
 	$Level.create()
 	start_game.rpc()
+
+
+func _on_level_pausing():
+	pass # Replace with function body.

@@ -4,7 +4,6 @@ extends Node
 @export var player_scene: PackedScene
 @export var map_scene: PackedScene
 
-	
 func create():
 	print('creating game')
 	var player
@@ -19,11 +18,10 @@ func create():
 	get_tree().paused = true
 	#$Camera2D.reparent(player)
 	add_child(map)
-
+	
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
-
+	pass
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
