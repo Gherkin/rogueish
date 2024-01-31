@@ -1,33 +1,25 @@
 extends Node
 
-@export var player_scene: PackedScene
-@export var map_scene: PackedScene
-
 @onready var current_menu = $MainMenu
 
 
 const PORT = 4433
 
+@rpc('call_local')
 func start_game():
 	print('starting game')
 	current_menu.hide()
+	get_tree().paused = false
 
-	
-func create_game():
-	print('creating game')
-	for id in multiplayer.get_peers():
-		var player = player_scene.instantiate()
-		player.player = id
-		$Level.add_child(player, true)
-	var player = player_scene.instantiate()
-	player.player = 1
-	$Level.add_child(player, true)
-	var map = map_scene.instantiate()
-	
-	#$Camera2D.reparent(player)
-	$Level.add_child(map)
-	start_game()
-	#get_tree().paused = false
+@rpc("call_local", "any_peer")
+func pause():
+	print('paused')
+	get_tree().paused = true
+
+@rpc("call_local", "any_peer")
+func unpause():
+	print('unpaused')
+	get_tree().paused = false
 
 func open_lobby():
 	$MainMenu.hide()
@@ -42,12 +34,13 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	pass
 
 
 func _on_main_menu_start_game():
-	create_game()
+	$Level.create()
+	start_game()
 
 
 func _on_main_menu_connect():
@@ -63,7 +56,7 @@ func _on_main_menu_connect():
 		OS.alert("Failed to start multiplayer client.")
 		return
 	multiplayer.multiplayer_peer = peer
-	start_game()
+	open_lobby()
 
 func _on_peer_connected(id):
 	print('connected!')
@@ -83,4 +76,5 @@ func _on_main_menu_host():
 
 
 func _on_lobby_menu_lobby_start():
-	create_game()
+	$Level.create()
+	start_game.rpc()

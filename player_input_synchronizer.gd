@@ -49,7 +49,7 @@ func button_released(input):
 			click = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	if !up and Input.is_action_pressed("up"):
 		button_pressed.rpc(Inputs.UP)
 	elif up and !Input.is_action_pressed("up"):
