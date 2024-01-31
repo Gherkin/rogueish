@@ -49,7 +49,7 @@ func _process(delta):
 
 
 func _on_rate_of_fire_timeout():
-	if not Input.is_action_pressed("click"):
+	if not input.click:
 		return
 	
 	var firebolt = firebolt_scene.instantiate()
