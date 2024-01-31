@@ -48,18 +48,22 @@ func _process(delta):
 	
 	position += velocity * delta
 
+@rpc('call_local', 'any_peer')
+func create_firebolt(player_pos, mouse_pos):
+	var firebolt = firebolt_scene.instantiate()
+	var direction = player_pos.angle_to_point(mouse_pos)
+	
+	firebolt.position = player_pos.move_toward(mouse_pos, projectile_offset)
+	firebolt.rotation = direction
+	firebolt.velocity = (mouse_pos - player_pos).normalized()
+	
+	$projectiles.add_child(firebolt)
 
 func _on_rate_of_fire_timeout():
 	if not input.click:
 		return
 	
-	var firebolt = firebolt_scene.instantiate()
-	firebolt.position = position.move_toward(get_global_mouse_position(), projectile_offset)
-	#var direction = randf_range(-PI, PI)
-	var direction = position.angle_to_point(get_global_mouse_position())
-	firebolt.velocity = (get_global_mouse_position() - position).normalized()
-	firebolt.rotation = direction
-	
-	$projectiles.add_child(firebolt, true)
+	create_firebolt.rpc(position, get_global_mouse_position())
+
 
 

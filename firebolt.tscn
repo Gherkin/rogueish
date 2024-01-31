@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://c8gcahfojnjup"]
+[gd_scene load_steps=7 format=3 uid="uid://c8gcahfojnjup"]
 
 [ext_resource type="Texture2D" uid="uid://b7ehibrrh5wyw" path="res://art/firebolt traveling.png" id="1_l0g4o"]
 [ext_resource type="Script" path="res://firebolt.gd" id="1_x62fc"]
@@ -27,17 +27,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_f0vl8"]
-properties/0/path = NodePath(".:velocity")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:position")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:rotation")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-
 [node name="Firebolt" type="Area2D"]
 script = ExtResource("1_x62fc")
 explosion_scene = ExtResource("2_7nd6r")
@@ -61,9 +50,6 @@ one_shot = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="projectile"]
 sprite_frames = SubResource("SpriteFrames_rhdre")
 animation = &"travel"
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_f0vl8")
 
 [connection signal="timeout" from="TravelTimer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="ExplodeTimer" to="." method="_on_explode_timer_timeout"]
