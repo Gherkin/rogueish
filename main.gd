@@ -58,16 +58,12 @@ func _on_main_menu_connect():
 	multiplayer.multiplayer_peer = peer
 	open_lobby()
 
-func _on_peer_connected(id):
-	print('connected!')
-	$LobbyMenu/Label.text = str(id)
-
 func _on_main_menu_host():
 	print('hosting')
 	# Start as server.
 	var peer = ENetMultiplayerPeer.new()
 	peer.create_server(PORT)
-	peer.connect("peer_connected", _on_peer_connected)
+	peer.connect("peer_connected", $LobbyMenu._on_peer_connected)
 	if peer.get_connection_status() == MultiplayerPeer.CONNECTION_DISCONNECTED:
 		OS.alert("Failed to start multiplayer server.")
 		return
