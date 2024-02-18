@@ -11,6 +11,20 @@ func start_game():
 	current_menu.hide()
 	get_tree().paused = false
 	$PauseMenu.started = true
+	
+@rpc('call_local')
+func stop_game():
+	get_tree().paused = true
+	print('stopping game')
+	$Level.purge()
+	current_menu.hide()
+	if multiplayer.get_peers().size() > 0:
+		$LobbyMenu.show()
+		current_menu = $LobbyMenu
+	else:
+		$MainMenu.show()
+		current_menu = $MainMenu
+	$PauseMenu.started = false
 
 func open_lobby():
 	$MainMenu.hide()
@@ -19,6 +33,7 @@ func open_lobby():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	multiplayer.server_relay = false
 	$LobbyMenu.hide()
 	#get_tree().paused = true
@@ -69,3 +84,7 @@ func _on_lobby_menu_lobby_start():
 
 func _on_level_pausing():
 	pass # Replace with function body.
+
+
+func _on_player_death():
+	stop_game.rpc()

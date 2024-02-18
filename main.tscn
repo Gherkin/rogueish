@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bb8ftfp4vw64f"]
+[gd_scene load_steps=10 format=3 uid="uid://bb8ftfp4vw64f"]
 
 [ext_resource type="PackedScene" uid="uid://dsksktdlmi6je" path="res://map.tscn" id="1_nsye8"]
 [ext_resource type="Script" path="res://main.gd" id="1_um6ja"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://dllb2x3c2t4js" path="res://main_menu.tscn" id="3_gldpg"]
 [ext_resource type="Script" path="res://Level.gd" id="5_tqbt3"]
 [ext_resource type="PackedScene" uid="uid://u81k3lprx5un" path="res://lobby_menu.tscn" id="5_y2vj6"]
+[ext_resource type="PackedScene" uid="uid://dwevw6cuuss7y" path="res://monster.tscn" id="6_0boer"]
+[ext_resource type="Script" path="res://Camera.gd" id="7_e2ie7"]
 [ext_resource type="PackedScene" uid="uid://gl0u1fn4tscx" path="res://pause_menu.tscn" id="7_mbd1l"]
 
 [node name="Main" type="Node"]
@@ -17,18 +19,28 @@ spawn_path = NodePath("../Level")
 
 [node name="MainMenu" parent="." instance=ExtResource("3_gldpg")]
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
 [node name="Level" type="Node" parent="."]
 script = ExtResource("5_tqbt3")
 player_scene = ExtResource("2_hhcsb")
+monster_scene = ExtResource("6_0boer")
 map_scene = ExtResource("1_nsye8")
 
 [node name="Characters" type="Node" parent="Level"]
 
+[node name="Monsters" type="Node" parent="Level"]
+
 [node name="CharacterSpawner" type="MultiplayerSpawner" parent="Level"]
 _spawnable_scenes = PackedStringArray("res://player.tscn")
 spawn_path = NodePath("../Characters")
+
+[node name="Camera2D" type="Camera2D" parent="Level"]
+script = ExtResource("7_e2ie7")
+
+[node name="MonsterSpawner" type="MultiplayerSpawner" parent="Level"]
+_spawnable_scenes = PackedStringArray("res://monster.tscn")
+spawn_path = NodePath("../Monsters")
+
+[node name="MobSpawnTimer" type="Timer" parent="Level"]
 
 [node name="LobbyMenu" parent="." instance=ExtResource("5_y2vj6")]
 
@@ -37,4 +49,6 @@ spawn_path = NodePath("../Characters")
 [connection signal="connect" from="MainMenu" to="." method="_on_main_menu_connect"]
 [connection signal="host" from="MainMenu" to="." method="_on_main_menu_host"]
 [connection signal="start_game" from="MainMenu" to="." method="_on_main_menu_start_game"]
+[connection signal="player_death" from="Level" to="." method="_on_player_death"]
+[connection signal="timeout" from="Level/MobSpawnTimer" to="Level" method="_on_mob_spawn_timer_timeout"]
 [connection signal="lobby_start" from="LobbyMenu" to="." method="_on_lobby_menu_lobby_start"]

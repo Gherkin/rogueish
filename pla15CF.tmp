@@ -68,8 +68,5 @@ root_path = NodePath("../ServerSynchronizer")
 replication_config = SubResource("SceneReplicationConfig_ctso1")
 script = ExtResource("5_lqq4s")
 
-[node name="InvulnerabilityTimer" type="Timer" parent="."]
-one_shot = true
-
 [connection signal="input_event" from="." to="." method="_on_input_event"]
 [connection signal="timeout" from="RateOfFire" to="." method="_on_rate_of_fire_timeout"]

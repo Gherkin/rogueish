@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://dwevw6cuuss7y"]
+
+[ext_resource type="Script" path="res://monster.gd" id="1_h0nxa"]
+[ext_resource type="Texture2D" uid="uid://b357id8fjeu4r" path="res://art/spectre-no-outline.png" id="1_rndgc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fu1dq"]
+size = Vector2(42, 44)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0vj6m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_rndgc")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_aodc3"]
+properties/0/path = NodePath(".:player")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Monster" type="Area2D"]
+script = ExtResource("1_h0nxa")
+speed = 150
+dmg = 10
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3, 1)
+shape = SubResource("RectangleShape2D_fu1dq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_0vj6m")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_aodc3")
+
+[node name="ReTargetTimer" type="Timer" parent="."]

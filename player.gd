@@ -3,6 +3,10 @@ extends Area2D
 @export var speed = 400
 @export var firebolt_scene: PackedScene
 @export var projectile_offset = 50
+@export var health = 100
+@export var invulnerability_time = 0.5
+
+signal dead
 
 @export var player := 1 :
 	set(id):
@@ -20,6 +24,7 @@ var velocity = Vector2.ZERO
 func _ready():
 	$AnimatedSprite2D.play()
 	$RateOfFire.start()
+	$InvulnerabilityTimer.wait_time = invulnerability_time
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -64,4 +69,12 @@ func _on_rate_of_fire_timeout():
 	create_firebolt.rpc(position, get_global_mouse_position())
 
 
-
+func inflict_dmg(dmg):
+	if $InvulnerabilityTimer.is_stopped():
+		health -= dmg
+		$InvulnerabilityTimer.start()
+		print(health)
+	
+	if(health <= 0):
+		print('im dead ' + str(multiplayer.get_unique_id()))
+		dead.emit()

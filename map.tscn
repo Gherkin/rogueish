@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dsksktdlmi6je"]
+[gd_scene load_steps=6 format=3 uid="uid://dsksktdlmi6je"]
 
 [ext_resource type="Texture2D" uid="uid://buy31feov1gc5" path="res://art/map tiles/Tilemap/tilemap_packed.png" id="1_byfrr"]
 [ext_resource type="Script" path="res://Ground.gd" id="2_mjxy2"]
@@ -240,8 +240,16 @@ terrain_set_0/terrain_0/name = "ground"
 terrain_set_0/terrain_0/color = Color(0.501961, 0.345098, 0.25098, 1)
 sources/1 = SubResource("TileSetAtlasSource_e2j70")
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_dojeb"]
+properties/0/path = NodePath(".:z_index")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
 [node name="Map" type="TileMap"]
 scale = Vector2(2, 2)
 tile_set = SubResource("TileSet_85725")
 format = 2
 script = ExtResource("2_mjxy2")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_dojeb")
