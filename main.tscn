@@ -41,6 +41,7 @@ _spawnable_scenes = PackedStringArray("res://monster.tscn")
 spawn_path = NodePath("../Monsters")
 
 [node name="MobSpawnTimer" type="Timer" parent="Level"]
+wait_time = 0.5
 
 [node name="LobbyMenu" parent="." instance=ExtResource("5_y2vj6")]
 

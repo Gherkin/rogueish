@@ -42,10 +42,10 @@ func create():
 	player.player = 1
 	player.connect('dead', _on_player_death)
 	$Characters.add_child(player, true)
-	var monster = monster_scene.instantiate()
-	monster.set_player(player.player)
-	monster.set_multiplayer_authority(1)
-	$Monsters.add_child(monster)
+	#var monster = monster_scene.instantiate()
+	#monster.set_player(player.player)
+	#monster.set_multiplayer_authority(1)
+	#$Monsters.add_child(monster)
 	$MobSpawnTimer.start()
 	#$Camera2D.reparent(player)
 	
@@ -63,4 +63,19 @@ func _on_player_death():
 
 
 func _on_mob_spawn_timer_timeout():
-	pass # Replace with function body.
+	print('spawning mob')
+	var spawn_pos = Vector2.ZERO
+	var center_pos = camera.get_screen_center_position()
+	var viewport_hypothenuse = camera.get_viewport().get_visible_rect().size.length()
+	var angle = randf() * 2 * PI
+	spawn_pos = Vector2(
+		viewport_hypothenuse * cos(angle),
+		viewport_hypothenuse * sin(angle))
+	spawn_pos += center_pos
+	
+	var monster = monster_scene.instantiate()
+	monster.position = spawn_pos
+	monster.set_player(1)
+	monster.set_multiplayer_authority(1)
+	$Monsters.add_child(monster)
+	#camera.draw_line(center_pos, spawn_pos, Color.RED, 1.0)

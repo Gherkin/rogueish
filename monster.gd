@@ -1,7 +1,7 @@
 extends Area2D
 
 @export var speed = 400
-@export var player: int
+@export var following_player: int
 var enemy := true
 @export var dmg := 0
 
@@ -11,7 +11,7 @@ var players = []
 var touching_players = []
 
 func set_player(player: int):
-	self.player = player
+	self.following_player = player
 	
 func find_nearest_player():
 	players.sort_custom(
@@ -36,7 +36,7 @@ func _process(delta):
 	
 	find_nearest_player()
 	
-	var player = players.filter(func(node): return node.player == player)[0]
+	var player = players.filter(func(node): return node.player == following_player)[0]
 	velocity = player.position - position
 	if abs(velocity.angle()) > PI/2:
 		$AnimatedSprite2D.flip_h = false
